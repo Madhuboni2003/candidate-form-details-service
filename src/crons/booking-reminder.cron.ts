@@ -13,7 +13,7 @@ export function bookingReminderCron(): void {
         try {
             await candidateSubmissionService.sendReminderNotificationForPendingBookings();
         } catch (error) {
-            logger.error('Something went wring', error);
+            logger.error('Something went wrong', error);
         }
     });
 }

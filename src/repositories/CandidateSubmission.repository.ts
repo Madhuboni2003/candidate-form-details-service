@@ -46,6 +46,18 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
             },
         );
     }
+    async markSubmissionAsBooked(id: string): Promise<void> {
+        await this.model.update(
+            {
+                status: CandidateSubmissionStatus.BOOKED
+            },
+            {
+                where: {
+                    publicId: id
+                }
+            },
+        );
+    }
 
     async findAllBookingPendingSubmisssions(cutoffTime: Date): Promise<CandidateSubmission[]> {
         const submissions = await this.model.findAll({
