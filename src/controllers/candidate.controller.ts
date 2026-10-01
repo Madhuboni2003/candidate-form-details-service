@@ -87,11 +87,31 @@ async function getAllCandidatesWhereBookingPending(_req: Request, res: Response,
         next(error);
     }
 }
+async function markSubmissionAsBookedHandler(req: Request,res: Response,next: NextFunction) {
+    try {
+        const { submissionId } =
+            req.params as unknown as GetSubmissionIdDto;
+
+        await candidateSubmissionService.markSubmissionAsBooked(
+            submissionId
+        );
+
+        res.status(StatusCodes.OK).json(
+            buildSuccessResponse(
+                'Submission status updated successfully',
+                {}
+            )
+        );
+    } catch (error) {
+        next(error);
+    }
+}
 
 export default {
     createCadidateHandler,
     createCandidateSubmissionHandler,
     getCandidateSubmissionHandler,
     getCandidateHandler,
-    getAllCandidatesWhereBookingPending
+    getAllCandidatesWhereBookingPending,
+    markSubmissionAsBookedHandler
 };

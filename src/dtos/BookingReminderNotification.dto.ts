@@ -3,6 +3,7 @@ import { NotificationChannel } from '../utils/enums/NotificationChannel.enum';
 export type BookingReminderNotificationDto = {
     candidateId: number;
     submissionId: string;
+    reminderNumber: number;
     candidateName: string;
     candidateEmail: string;
     candidatePhone: string;

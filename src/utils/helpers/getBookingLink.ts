@@ -1,11 +1,8 @@
-export function getBookingLink( formSlug: string, submissionId: string ) : string {
-    
+import { frontendConfig } from '../../configs/server.config';
 
-    const baseUrl = process.env.CANDIDATE_FRONTEND_URL;
-
-    if(!baseUrl) {
-        throw new Error('CANDIDATE_FRONTEND_URL is not configured');
-    }
-
-    return `${baseUrl}/readiness/${formSlug}/book-strategy-call?submission-id=${submissionId}`;
+export function getBookingLink(
+    formSlug: string,
+    submissionId: string,
+): string {
+    return `${frontendConfig.CANDIDATE_FRONTEND_URL}/${formSlug}/book-strategy-call?submission-id=${submissionId}`;
 }

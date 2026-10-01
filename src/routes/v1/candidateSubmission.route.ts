@@ -18,10 +18,17 @@ submissionRouter.put(
     candidateController.createCandidateSubmissionHandler
 );
 
+submissionRouter.put(
+    '/:submissionId/book',
+    validateRequestParams(getCandidateSubmissionParamsSchema),
+    candidateController.markSubmissionAsBookedHandler
+);
+
 submissionRouter.get(
     '/:submissionId',
     validateRequestParams(getCandidateSubmissionParamsSchema),
     candidateController.getCandidateSubmissionHandler
 );
+
 
 export default submissionRouter;
