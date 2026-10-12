@@ -30,7 +30,8 @@ class Candidate extends Model<InferAttributes<Candidate>, InferCreationAttribute
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
     declare deletedAt: CreationOptional<Date | null>;
-
+    declare emailUnsubscribedAt: CreationOptional<Date | null>;
+    declare optedOutAt: CreationOptional<Date | null>;
     declare submissions?: NonAttribute<CandidateSubmission[]>;
 
     // HasMany CandidateSubmission mixins
@@ -86,6 +87,18 @@ Candidate.init({
     updatedAt: {
         type: DataTypes.DATE,
         allowNull: false
+    },
+
+    emailUnsubscribedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+    },
+
+    optedOutAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
     },
 
     deletedAt: {

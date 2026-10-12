@@ -5,6 +5,8 @@ import FormQuestion from './FormQuestion.model';
 import FormQuestionOption from './FormQuestionOption.model';
 import FormStep from './FormStep.model';
 import QualificationForm from './QualificationForm.model';
+import VslRun from './VslRun.model';
+import VslStep from './VslStep.model';
 
 function setupAssociations(): void {
     QualificationForm.hasMany(FormStep, {
@@ -95,6 +97,28 @@ function setupAssociations(): void {
     CandidateAnswer.belongsTo(FormQuestionOption, {
         foreignKey: 'selectedOptionId',
         as: 'selectedOption',
+    });
+
+        // A VSL run belongs to one candidate and one submission.
+    VslRun.belongsTo(Candidate, {
+        foreignKey: 'candidateId',
+        as: 'candidate',
+    });
+
+    VslRun.belongsTo(CandidateSubmission, {
+        foreignKey: 'submissionId',
+        as: 'submission',
+    });
+
+    // Each VSL run contains its scheduled steps.
+    VslRun.hasMany(VslStep, {
+        foreignKey: 'runId',
+        as: 'steps',
+    });
+
+    VslStep.belongsTo(VslRun, {
+        foreignKey: 'runId',
+        as: 'run',
     });
 }
 

@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 
-import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, ServerConfig } from '../types/Config.type';
+import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, ServerConfig ,VslConfig} from '../types/Config.type';
+import { readBooleanEnv, readListEnv } from '../utils/helpers/env.helper';
 
 dotenv.config();
 
@@ -51,4 +52,24 @@ export const bookingServiceConfig: InternalServiceConfig = {
 export const notificationServiceConfig: InternalServiceConfig = {
     BASE_URL: process.env.NOTIFICATION_SERVICE_BASE_URL || 'http://localhost:3005/api/v1',
     TIMEOUT_MS: Number(process.env.NOTIFICATION_SERVICE_TIMEOUT_MS) || 3000
+};
+
+// VSL abandonment follow-up chain.
+// The defaults below are the production values and they are safe: the chain is off,
+// and if you switch it on it only logs (dry run) until you turn DRY_RUN off.
+// For testing, override them in .env.
+export const vslConfig: VslConfig = {
+    ENABLED: readBooleanEnv('VSL_ENABLED', false),
+    DRY_RUN: readBooleanEnv('VSL_DRY_RUN', true),
+    SWEEP_CRON: process.env.VSL_SWEEP_CRON || '*/15 * * * *',
+    STEP_UNIT_MINUTES: Number(process.env.VSL_STEP_UNIT_MINUTES) || 1440,
+    ENROLL_MIN_AGE_MINUTES: Number(process.env.VSL_ENROLL_MIN_AGE_MINUTES) || 1440,
+    ENROLL_MAX_AGE_MINUTES: Number(process.env.VSL_ENROLL_MAX_AGE_MINUTES) || 2880,
+    TOO_LATE_MINUTES: Number(process.env.VSL_TOO_LATE_MINUTES) || 2880,
+    SEND_WINDOW_ENABLED: readBooleanEnv('VSL_SEND_WINDOW_ENABLED', true),
+    SEND_WINDOW_START_HOUR: Number(process.env.VSL_SEND_WINDOW_START_HOUR) || 9,
+    SEND_WINDOW_END_HOUR: Number(process.env.VSL_SEND_WINDOW_END_HOUR) || 21,
+    ELIGIBLE_FORM_SLUGS: readListEnv('VSL_ELIGIBLE_FORM_SLUGS', ['job-switch']),
+    TEST_EMAIL_ALLOWLIST: readListEnv('VSL_TEST_EMAIL_ALLOWLIST'),
+    BATCH_SIZE: Number(process.env.VSL_BATCH_SIZE) || 50
 };

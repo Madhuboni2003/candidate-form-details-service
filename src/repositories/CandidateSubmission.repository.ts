@@ -94,6 +94,79 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
         });
     }
 
+    async findVslEnrollmentCandidates(filters: {
+        createdAfter: Date;
+        createdBefore: Date;
+        formSlugs: string[];
+        limit: number;
+    }): Promise<CandidateSubmission[]> {
+        if (filters.formSlugs.length === 0) {
+            return [];
+        }
+
+        if (!Number.isInteger(filters.limit) || filters.limit < 1) {
+            throw new Error('limit must be a positive integer');
+        }
+
+        return await this.model.findAll({
+            where: {
+                status: CandidateSubmissionStatus.SUBMISSION_PENDING,
+
+                createdAt: {
+                    [Op.gte]: filters.createdAfter,
+                    [Op.lte]: filters.createdBefore,
+                },
+
+                formSlug: {
+                    [Op.in]: filters.formSlugs,
+                },
+
+                deletedAt: null,
+
+                [Op.and]: [
+                    literal(`
+                        NOT EXISTS (
+                            SELECT 1
+                            FROM vsl_runs AS vr
+                            WHERE
+                                vr.submission_id = CandidateSubmission.id
+                                OR (
+                                    vr.candidate_id = CandidateSubmission.candidate_id
+                                    AND vr.status = 'active'
+                                )
+                        )
+                    `),
+                ],
+            },
+
+            include: [
+                {
+                    model: Candidate,
+                    as: 'candidate',
+                    attributes: [
+                        'id',
+                        'fullName',
+                        'email',
+                        'emailUnsubscribedAt',
+                        'optedOutAt',
+                    ],
+                    where: {
+                        deletedAt: null,
+                        emailUnsubscribedAt: null,
+                        optedOutAt: null,
+                    },
+                    required: true,
+                },
+            ],
+
+            order: [
+                ['createdAt', 'ASC'],
+                ['id', 'ASC'],
+            ],
+
+            limit: filters.limit,
+        });
+    } 
 
     private buildAdminBaseConditions(filters: AdminSubmissionBaseFilters): WhereOptions[] {
         const conditions: WhereOptions[] = [{ deletedAt: null }];
