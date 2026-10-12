@@ -60,6 +60,11 @@ export const notificationServiceConfig: InternalServiceConfig = {
 // For testing, override them in .env.
 export const vslConfig: VslConfig = {
     ENABLED: readBooleanEnv('VSL_ENABLED', false),
+    ENROLLMENT_DRY_RUN: readBooleanEnv(
+        'VSL_ENROLLMENT_DRY_RUN',
+        true,
+    ),
+
     DRY_RUN: readBooleanEnv('VSL_DRY_RUN', true),
     SWEEP_CRON: process.env.VSL_SWEEP_CRON || '*/15 * * * *',
     STEP_UNIT_MINUTES: Number(process.env.VSL_STEP_UNIT_MINUTES) || 1440,

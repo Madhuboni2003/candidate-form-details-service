@@ -38,7 +38,11 @@ export type InternalServiceConfig = {
 export type VslConfig = {
     // master switch: when false the sweeper does nothing
     ENABLED: boolean
-    // when true we only log what we would do; nothing is written or sent
+
+    // when true, eligible candidates are not enrolled in the database
+    ENROLLMENT_DRY_RUN: boolean
+
+    // when true, due steps are not claimed or enqueued for notification
     DRY_RUN: boolean
     // how often the sweeper runs (cron expression)
     SWEEP_CRON: string

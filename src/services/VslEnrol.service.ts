@@ -84,6 +84,9 @@ class VslEnrolService {
             const candidate = submission.candidate;
 
             if (!candidate?.email) {
+                logger.warn(
+                    `VSL enrollment skipped: candidate email missing. Submission ID: ${submission.id}, Candidate ID: ${candidate?.id ?? 'missing'}.`,
+                );
                 skippedCount++;
                 continue;
             }
@@ -94,13 +97,16 @@ class VslEnrolService {
                 emailAllowlist.size > 0 &&
                 !emailAllowlist.has(candidateEmail)
             ) {
+                logger.warn(
+                    `VSL enrollment skipped: candidate email is not in the test allowlist. Submission ID: ${submission.id}.`,
+                );
                 skippedCount++;
                 continue;
             }
 
-            if (vslConfig.DRY_RUN) {
+            if (vslConfig.ENROLLMENT_DRY_RUN) {
                 logger.info(
-                    `VSL DRY RUN: would enrol submission ID ${submission.id}.`,
+                    `VSL ENROLLMENT DRY RUN: would enrol submission ID ${submission.id}.`,
                 );
 
                 dryRunCount++;
