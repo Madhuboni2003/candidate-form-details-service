@@ -44,6 +44,8 @@ class Candidate extends Model<InferAttributes<Candidate>, InferCreationAttribute
     declare removeSubmission: HasManyRemoveAssociationMixin<CandidateSubmission, string>;
     declare removeSubmissions: HasManyRemoveAssociationsMixin<CandidateSubmission, string>;
     declare createSubmission: HasManyCreateAssociationMixin<CandidateSubmission, 'candidateId'>;
+    declare optedOutAt: CreationOptional<Date | null>;
+    declare optOutReason: CreationOptional<string | null>;
 
     declare static associations: {
         submissions: Association<Candidate, CandidateSubmission>;
@@ -90,6 +92,16 @@ Candidate.init({
 
     deletedAt: {
         type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
+    optedOutAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
+    optOutReason: {
+        type: DataTypes.STRING(64),
         allowNull: true,
         defaultValue: null
     },

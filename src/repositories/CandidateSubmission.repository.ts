@@ -307,6 +307,32 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
 
         return rows.map((row) => String(row.source));
     }
+
+    // Fetches pending submissions within the configured enrollment window.
+    async findVslEnrollmentCandidates(
+        minCreatedAt: Date,
+        maxCreatedAt: Date,
+        formSlugs: string[]
+    ): Promise<CandidateSubmission[]> {
+        if (!formSlugs.length) return [];
+
+        return this.model.findAll({
+            where: {
+                status: CandidateSubmissionStatus.SUBMISSION_PENDING,
+                formSlug: { [Op.in]: formSlugs },
+                createdAt: { [Op.between]: [minCreatedAt, maxCreatedAt] },
+                deletedAt: null
+            },
+            include: [{
+                model: Candidate,
+                as: 'candidate',
+                attributes: ['id', 'fullName', 'email', 'optedOutAt', 'optOutReason'],
+                where: { deletedAt: null, optedOutAt: null },
+                required: true
+            }],
+            order: [['createdAt', 'DESC']]
+        });
+    }
 }
 
 export default CandidateSubmissionRepository;

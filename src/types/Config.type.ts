@@ -54,3 +54,17 @@ export type ReminderConfig = {
     FIRST_DELAY_MS: number
     GAP_MS: number
 }
+
+export type VslConfig = {
+    ENABLED: boolean
+    DRY_RUN: boolean
+    CRON_EXPRESSION: string
+    ENROLL_MIN_AGE_MINUTES: number
+    ENROLL_MAX_AGE_MINUTES: number
+    STEP_UNIT_MINUTES: number
+    TOO_LATE_MINUTES: number
+    SEND_WINDOW_START_HOUR: number
+    SEND_WINDOW_END_HOUR: number
+    FORM_SLUGS: string[]
+    TEST_ALLOWLIST: string[]
+}

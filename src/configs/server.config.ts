@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, RateLimitConfig, ReminderConfig, ServerConfig, WorkrIntegrationConfig } from '../types/Config.type';
+import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, RateLimitConfig, ReminderConfig, ServerConfig,VslConfig, WorkrIntegrationConfig } from '../types/Config.type';
 
 dotenv.config();
 
@@ -90,4 +90,19 @@ const HOUR_MS = 60 * MINUTE_MS;
 export const reminderConfig: ReminderConfig = {
     FIRST_DELAY_MS: 10 * MINUTE_MS,
     GAP_MS: 6 * HOUR_MS
+};
+
+
+export const vslConfig: VslConfig = {
+    ENABLED: process.env.VSL_ENABLED === 'true',
+    DRY_RUN: process.env.VSL_DRY_RUN !== 'false',
+    CRON_EXPRESSION: process.env.VSL_SWEEP_CRON || '*/15 * * * *',
+    ENROLL_MIN_AGE_MINUTES: Number(process.env.VSL_ENROLL_MIN_AGE_MINUTES) || 10,
+    ENROLL_MAX_AGE_MINUTES: Number(process.env.VSL_ENROLL_MAX_AGE_MINUTES) || 21600,
+    STEP_UNIT_MINUTES: Number(process.env.VSL_STEP_UNIT_MINUTES) || 1440,
+    TOO_LATE_MINUTES: Number(process.env.VSL_TOO_LATE_MINUTES) || 1440,
+    SEND_WINDOW_START_HOUR: Number(process.env.VSL_SEND_WINDOW_START_HOUR) || 9,
+    SEND_WINDOW_END_HOUR: Number(process.env.VSL_SEND_WINDOW_END_HOUR) || 21,
+    FORM_SLUGS: (process.env.VSL_FORM_SLUGS || '').split(',').map(s => s.trim()).filter(Boolean),
+    TEST_ALLOWLIST: (process.env.VSL_TEST_ALLOWLIST || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean)
 };

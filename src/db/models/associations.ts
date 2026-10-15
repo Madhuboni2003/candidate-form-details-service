@@ -5,6 +5,7 @@ import FormQuestion from './FormQuestion.model';
 import FormQuestionOption from './FormQuestionOption.model';
 import FormStep from './FormStep.model';
 import QualificationForm from './QualificationForm.model';
+import VslRun from './VslRun.model';
 
 function setupAssociations(): void {
     QualificationForm.hasMany(FormStep, {
@@ -95,6 +96,26 @@ function setupAssociations(): void {
     CandidateAnswer.belongsTo(FormQuestionOption, {
         foreignKey: 'selectedOptionId',
         as: 'selectedOption',
+    });
+
+        Candidate.hasMany(VslRun, {
+        foreignKey: 'candidateId',
+        as: 'vslRuns'
+    });
+
+    VslRun.belongsTo(Candidate, {
+        foreignKey: 'candidateId',
+        as: 'candidate'
+    });
+
+    CandidateSubmission.hasOne(VslRun, {
+        foreignKey: 'submissionId',
+        as: 'vslRun'
+    });
+
+    VslRun.belongsTo(CandidateSubmission, {
+        foreignKey: 'submissionId',
+        as: 'submission'
     });
 }
 
