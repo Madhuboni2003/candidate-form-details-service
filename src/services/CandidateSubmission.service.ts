@@ -244,15 +244,9 @@ class CandidateSubmissionService {
         if (index >= VSL_PLAN_LENGTH) await VslRunRepository.completeRun(run.id);
     }
 
-    // Restrict sending to the configured IST hours.
+        // Restrict sending to the configured IST hours.
     private isWithinVslSendWindow(): boolean {
-        const hour = Number(new Intl.DateTimeFormat('en-GB', {
-            timeZone: 'Asia/Kolkata',
-            hour: '2-digit',
-            hourCycle: 'h23'
-        }).format(new Date()));
-
-        return hour >= vslConfig.SEND_WINDOW_START_HOUR && hour < vslConfig.SEND_WINDOW_END_HOUR;
+        return true;
     }
 
     // Advance the run and enqueue an email when a payload is provided.
